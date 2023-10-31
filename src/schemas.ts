@@ -9,12 +9,13 @@ export const radioSchema = z
 export const checkboxSchema = z
   .union([z.string().array(), z.boolean()])
   .optional()
-  .transform((v) => (typeof v === "boolean" ? [] : v))
-  .optional();
+  .transform((v) => (typeof v === "boolean" ? [] : v));
 
 export const productSchema = ({ onlyName }: { onlyName: boolean }) =>
   z.object({
     name: radioSchema,
+
+    // FIXME: これをすると型が壊れる
     ...(onlyName
       ? {}
       : {
