@@ -2,7 +2,7 @@ import { UseFormRegisterReturn, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MyForm, myFormSchema } from "./schemas";
 import { nameOnlyFieldData, ramenFieldData } from "./data";
-import { ChangeEventHandler, ReactNode, useState } from "react";
+import { ReactNode, useState } from "react";
 
 export default function App() {
   const [onlyName, setOnlyName] = useState(false);
@@ -57,18 +57,19 @@ export default function App() {
                 <Grid key={ramenField.name}>
                   <Check
                     type="radio"
-                    registerReturn={register("ramen.name")}
-                    value={ramenField.name}
-                    onChange={() => {
-                      resetField("ramen.option1");
-                      resetField("ramen.option2");
+                    registerReturn={register("ramen.name", {
+                      onChange: () => {
+                        resetField("ramen.option1");
+                        resetField("ramen.option2");
 
-                      setOnlyName(() => {
-                        return nameOnlyFieldData.some(
-                          (v) => v.name === watch("ramen.name")
-                        );
-                      });
-                    }}
+                        setOnlyName(() => {
+                          return nameOnlyFieldData.some(
+                            (v) => v.name === watch("ramen.name")
+                          );
+                        });
+                      },
+                    })}
+                    value={ramenField.name}
                   />
 
                   {ramenField.options1 &&
@@ -85,11 +86,12 @@ export default function App() {
                             <Grid key={option}>
                               <Check
                                 type="radio"
-                                registerReturn={register("ramen.option1")}
+                                registerReturn={register("ramen.option1", {
+                                  onChange: () => {
+                                    resetField("ramen.option2");
+                                  },
+                                })}
                                 value={option}
-                                onChange={() => {
-                                  resetField("ramen.option2");
-                                }}
                               />
 
                               {ramenField.options2 &&
@@ -143,29 +145,14 @@ function Check({
   registerReturn,
   value,
   type,
-  onChange: argOnChange,
 }: {
   registerReturn: UseFormRegisterReturn;
   value: string;
   type: "radio" | "checkbox";
-  onChange?: () => void;
 }) {
-  const { onChange: defaultOnChange } = registerReturn;
-
-  const onChange: ChangeEventHandler = async (event) => {
-    await defaultOnChange(event);
-
-    argOnChange && argOnChange();
-  };
-
   return (
     <label style={{ display: "block", cursor: "pointer" }}>
-      <input
-        type={type}
-        {...registerReturn}
-        value={value}
-        onChange={onChange}
-      />
+      <input type={type} {...registerReturn} value={value} />
       {value}
     </label>
   );
