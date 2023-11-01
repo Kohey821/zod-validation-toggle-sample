@@ -2,8 +2,7 @@ import { z } from "zod";
 
 export const radioSchema = z
   .string()
-  .nullable()
-  .optional()
+  .nullish()
   .refine((v) => typeof v === "string", { message: "選択してください。" });
 
 export const checkboxSchema = z
