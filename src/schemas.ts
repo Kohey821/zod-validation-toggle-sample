@@ -2,12 +2,12 @@ import { z } from "zod";
 
 export const radioSchema = z
   .string()
-  .nullish()
+  .nullish() // NOTE: requiredエラーはrefineで表現するため
   .refine((v) => typeof v === "string", { message: "選択してください。" });
 
 export const checkboxSchema = z
   .union([z.string().array(), z.boolean()])
-  .optional()
+  .optional() // NOTE: requiredエラーはrefineで表現するため
   .transform((v) => (typeof v === "boolean" ? [] : v));
 
 export const productSchema = ({ onlyName }: { onlyName: boolean }) =>
