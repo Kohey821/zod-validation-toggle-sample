@@ -11,7 +11,7 @@ export const radioSchema = (passValidation: boolean = false) =>
 export const checkboxSchema = () =>
   z
     .union([z.string().array(), z.boolean()])
-    .optional() // NOTE: requiredエラーはrefineで表現するため
+    .optional() // NOTE: 各primitiveのrequiredエラーを防止するため
     .transform((v) => (typeof v === "boolean" ? [] : v));
 
 export const productSchema = ({ onlyName }: { onlyName: boolean }) =>
