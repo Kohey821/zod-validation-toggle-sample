@@ -1,4 +1,4 @@
-# toggle-zod-validation-sample
+# zod-validation-toggle-sample
 
 - 概要
   - resolver に zod を使用した react-hook-form を使用
